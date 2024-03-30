@@ -41,7 +41,7 @@ model Poem {
     createdAt           DateTime? @default(now())
     updatedAt           DateTime? @updatedAt
     views               Int       @default(0)
-    Famous              Famous[]
+    quotes              Quote[]
 }
 
 model Author {
@@ -59,7 +59,7 @@ model Author {
     poems      Poem[]
     createdAt  DateTime? @default(now())
     updatedAt  DateTime? @updatedAt
-    Famous     Famous[]
+    quotes     Quote[]
 }
 
 model Tag {
@@ -67,8 +67,7 @@ model Tag {
     name              String    @unique
     name_zh_Hant      String?
     poems             Poem[]
-    // 1: 词牌名 2: 曲牌名
-    type              String?
+    type              String? // 1: 词牌名 2: 曲牌名
     type_zh_Hant      String?
     introduce         String?
     introduce_zh_Hant String?
@@ -76,14 +75,14 @@ model Tag {
     updatedAt         DateTime? @updatedAt
 }
 
-model Famous {
+model Quote {
     id               Int      @id @default(autoincrement())
     sentence         String   @unique
-    sentence_zh_Hant String
-    poem             Poem     @relation(fields: [poemId], references: [id])
-    poemId           Int
-    author           Author   @relation(fields: [authorId], references: [id])
-    authorId         Int
+    sentence_zh_Hant String   @unique
+    poem             Poem?    @relation(fields: [poemId], references: [id])
+    poemId           Int?
+    author           Author?  @relation(fields: [authorId], references: [id])
+    authorId         Int?
     createdAt        DateTime @default(now())
     updatedAt        DateTime @updatedAt
 }

@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { api } from "~/trpc/react";
+import { convertToHans, convertToHant } from "~/utils/convert";
 
 export default function AuthorPage({
   searchParams,
@@ -12,6 +14,16 @@ export default function AuthorPage({
 }) {
   const token = searchParams?.token ?? "";
   const router = useRouter();
+  const quote = api.quote.createMany.useMutation({
+    onSuccess(data) {
+      console.log(data);
+      alert("保存成功");
+    },
+    onError(err) {
+      console.error(err);
+      alert("保存失败");
+    },
+  });
 
   const [json, setJson] = useState("");
 
@@ -45,19 +57,19 @@ export default function AuthorPage({
           <Button
             variant={"outline"}
             onClick={() => {
-              setArr(JSON.parse(json) as string[]);
+              const data = arr.map((item) => ({
+                sentence: convertToHans(item),
+                sentence_zh_Hant: convertToHant(item),
+              }));
+
+              quote.mutate({
+                token,
+                data,
+              });
             }}
           >
             一键保存
           </Button>
-        </div>
-
-        <div className="flex flex-col text-f50">
-          {arr.map((item, index) => (
-            <div key={index}>
-              <div>{item}</div>
-            </div>
-          ))}
         </div>
       </div>
     </>
