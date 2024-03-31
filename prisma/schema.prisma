@@ -59,7 +59,6 @@ model Author {
     poems      Poem[]
     createdAt  DateTime? @default(now())
     updatedAt  DateTime? @updatedAt
-    quotes     Quote[]
 }
 
 model Tag {
@@ -75,14 +74,13 @@ model Tag {
     updatedAt         DateTime? @updatedAt
 }
 
+// Quote 的作者和标签 = Poem 的作者和标签
 model Quote {
     id               Int      @id @default(autoincrement())
     sentence         String   @unique
     sentence_zh_Hant String   @unique
     poem             Poem?    @relation(fields: [poemId], references: [id])
     poemId           Int?
-    author           Author?  @relation(fields: [authorId], references: [id])
-    authorId         Int?
     createdAt        DateTime @default(now())
     updatedAt        DateTime @updatedAt
 }
