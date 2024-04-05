@@ -72,6 +72,12 @@ export default function AuthorPage({
           </Button>
         </div>
       </div>
+
+      <div className="grid-co grid">
+        {arr.map((item, index) => (
+          <div key={index}>{item}</div>
+        ))}
+      </div>
     </>
   );
 }

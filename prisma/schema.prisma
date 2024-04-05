@@ -41,7 +41,6 @@ model Poem {
     createdAt           DateTime? @default(now())
     updatedAt           DateTime? @updatedAt
     views               Int       @default(0)
-    quotes              Quote[]
 }
 
 model Author {
@@ -79,8 +78,6 @@ model Quote {
     id               Int      @id @default(autoincrement())
     sentence         String   @unique
     sentence_zh_Hant String   @unique
-    poem             Poem?    @relation(fields: [poemId], references: [id])
-    poemId           Int?
     createdAt        DateTime @default(now())
     updatedAt        DateTime @updatedAt
 }
