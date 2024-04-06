@@ -25,8 +25,8 @@ export default function QuotePage({
       localStorage.setItem(
         "quote-already-save-data",
         JSON.stringify([
-          saveData?.map((item) => item.sentence),
-          ...(alreadySaveData || []),
+          ...(saveData || []).map((item) => item.sentence),
+          ...alreadySaveData,
         ]),
       );
 
@@ -40,7 +40,7 @@ export default function QuotePage({
   });
 
   const [json, setJson] = useState("");
-  const [alreadySaveData, setAlreadySaveData] = useState<string[]>();
+  const [alreadySaveData, setAlreadySaveData] = useState<string[]>([]);
 
   // 未处理的数据
   const [quotes, setQuotes] = useState<string[]>([]);
@@ -70,7 +70,6 @@ export default function QuotePage({
         })
         .filter(Boolean) as SaveData[];
 
-      console.log(result);
       setSaveData(result);
     }
   }, [poems, quotes]);
@@ -100,7 +99,13 @@ export default function QuotePage({
           />
           <Button
             onClick={() => {
-              setQuotes((JSON.parse(json) as string[]).map((item) => item));
+              const result = (JSON.parse(json) as string[]).map((item) => item);
+
+              setQuotes(
+                result.filter(
+                  (item) => alreadySaveData.includes(item) === false,
+                ),
+              );
             }}
           >
             一键填充
@@ -108,7 +113,6 @@ export default function QuotePage({
           <Button
             variant={"outline"}
             onClick={() => {
-              console.log(saveData);
               if (!saveData) return alert("请先填充名句");
 
               quote.mutate({
