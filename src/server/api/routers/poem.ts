@@ -121,14 +121,12 @@ export const poemRouter = createTRPCRouter({
 
   find: publicProcedure
     .input(
-      z
-        .object({
-          page: z.number().optional().default(1),
-          pageSize: z.number().optional().default(28),
-          sort: z.enum(["updatedAt", "improve", "createdAt"]).optional(),
-          lang: LangZod,
-        })
-        .optional(),
+      z.object({
+        page: z.number().default(1),
+        pageSize: z.number().default(28),
+        sort: z.enum(["updatedAt", "improve", "createdAt"]).optional(),
+        lang: LangZod,
+      }),
     )
     .query(async ({ input = {}, ctx }) => {
       const { page = 1, pageSize = 28 } = input;
@@ -344,6 +342,34 @@ export const poemRouter = createTRPCRouter({
         is_hant,
       };
     }),
+
+  /**
+   * 根据名句查找诗词
+   * @returns poemId[]
+   */
+  findByQuotes: publicProcedure
+    .input(z.array(z.string()))
+    .query(async ({ ctx, input }) => {
+      const result = await ctx.db.$transaction(
+        input.map((quote) =>
+          ctx.db.poem.findMany({
+            where: {
+              OR: [
+                { content: { contains: quote } },
+                { content_zh_Hant: { contains: quote } },
+              ],
+            },
+            select: {
+              id: true,
+            },
+          }),
+        ),
+      );
+
+      const res = result.map((item) => item[0]?.id) || [];
+      return res;
+    }),
+
   /**
    * 创建诗词
    */

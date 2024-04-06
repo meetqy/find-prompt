@@ -10,6 +10,7 @@ export const quoteRouter = createTRPCRouter({
           z.object({
             sentence: z.string(),
             sentence_zh_Hant: z.string(),
+            poemId: z.number().optional(),
           }),
         ),
       }),
