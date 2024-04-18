@@ -1,0 +1,3 @@
+.layout-content {
+  @apply m-auto h-full max-w-screen-xl;
+}

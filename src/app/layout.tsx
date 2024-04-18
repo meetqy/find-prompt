@@ -1,6 +1,7 @@
 import { ThemeProvider } from "~/components/theme-provider";
 import "~/styles/themes.css";
 import "~/styles/globals.css";
+import "~/styles/layout.css";
 
 import { TRPCReactProvider } from "~/trpc/react";
 

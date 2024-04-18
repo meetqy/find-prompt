@@ -137,17 +137,3 @@ rt {
 .dot {
   @apply mx-1;
 }
-
-.fuck {
-  .dot {
-    @apply !-mx-1;
-  }
-
-  .title {
-    .char {
-      &.symbol {
-        @apply !-mx-3;
-      }
-    }
-  }
-}
