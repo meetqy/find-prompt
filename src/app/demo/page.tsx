@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "~/components/ui/button";
 import { DeskTopMenu, MobileMenu } from "./components/menu";
 
 export default function Page() {
@@ -25,8 +24,8 @@ export default function Page() {
           </div>
 
           {/* 中间内容 */}
-          <div className="flex-1 border-x">
-            <div className="min-h-screen bg-red-500"></div>
+          <div className="flex-1">
+            <div className="m-auto min-h-screen border-x"></div>
           </div>
         </div>
       </main>
