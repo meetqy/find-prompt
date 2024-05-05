@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { LangZod, transformPoem, transformTag } from "../utils";
 import { splitChineseSymbol } from "~/utils";
+import { sampleSize } from "lodash-es";
 
 let token: {
   access_token: string;
@@ -284,6 +285,34 @@ export const poemRouter = createTRPCRouter({
         total,
       };
     }),
+
+  // 只返回律诗和绝句
+  findGeneratorCard: publicProcedure.query(async ({ ctx }) => {
+    const res = await ctx.db.poem.findMany({
+      where: {
+        tags: {
+          some: {
+            name: {
+              in: ["五言绝句", "七言绝句"],
+            },
+          },
+        },
+      },
+      select: {
+        title: true,
+        content: true,
+        author: {
+          select: {
+            name: true,
+            dynasty: true,
+          },
+        },
+      },
+      take: 50,
+    });
+
+    return sampleSize(res, 4);
+  }),
 
   /**
    * 文心一言生成诗词译文
