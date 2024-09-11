@@ -1,16 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 
-export * from "@prisma/client";
+const env = process.env;
 
-const globalForPrisma = globalThis as { prisma?: PrismaClient };
-
-export const prisma =
-  globalForPrisma.prisma ||
+const createPrismaClient = () =>
   new PrismaClient({
     log:
-      process.env.NODE_ENV === "development"
-        ? ["query", "error", "warn"]
-        : ["error"],
+      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
   });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+const globalForPrisma = globalThis as unknown as {
+  prisma: ReturnType<typeof createPrismaClient> | undefined;
+};
+
+export const db = globalForPrisma.prisma ?? createPrismaClient();
+
+if (env.NODE_ENV !== "production") globalForPrisma.prisma = db;
