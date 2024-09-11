@@ -19,7 +19,6 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@acme/auth": "workspace:*",
     "@acme/db": "workspace:*",
     "@acme/validators": "workspace:*",
     "@trpc/server": "catalog:",
