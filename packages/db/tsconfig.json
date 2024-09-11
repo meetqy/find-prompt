@@ -1,4 +1,4 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "@acme/tsconfig/internal-package.json",
   "include": ["index.ts"]
 }
